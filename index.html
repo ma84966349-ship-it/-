@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お茶のひみつ絵本 〜どうやってできるの？〜</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: ほっこりした丸ゴシック体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      background-color: #f0fdf4; /* 優しい薄緑 */
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    ruby {
+      ruby-position: over;
+    }
+    rt {
+      font-size: 0.55em;
+      letter-spacing: 0.05em;
+      color: #15803d;
+      font-weight: bold;
+    }
+    /* アニメーション用キーフレーム */
+    @keyframes steam {
+      0% { transform: translateY(0) scale(1); opacity: 0; }
+      50% { opacity: 0.8; }
+      100% { transform: translateY(-40px) scale(1.3); opacity: 0; }
+    }
+    .steam-effect {
+      animation: steam 1.5s infinite ease-out;
+    }
+    @keyframes shake {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-5deg); }
+      75% { transform: rotate(5deg); }
+    }
+    .shake-active {
+      animation: shake 0.3s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-3 md:p-6">
+
+  <!-- メイン絵本カード -->
+  <main class="max-w-xl w-full mx-auto bg-white rounded-3xl shadow-xl border-4 border-green-300 overflow-hidden flex flex-col justify-between min-h-[620px] my-auto relative">
+    
+    <!-- 進行度インジケーター -->
+    <div class="w-full bg-green-100 h-4 flex relative">
+      <div id="progress-bar" class="bg-green-500 h-full rounded-r-full transition-all duration-500" style="width: 14.2%;"></div>
+      <span class="absolute right-3 top-0.5 text-[9px] font-bold text-green-700" id="progress-text">1 / 7 ぺーじ</span>
+    </div>
+
+    <!-- 絵本本文・インタラクティブエリア -->
+    <div class="p-5 flex-grow flex flex-col justify-center items-center text-center">
+
+      <!-- ================= 1ページ目：表紙 ================= -->
+      <div id="page-1" class="page-content flex flex-col items-center">
+        <span class="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full mb-3 shadow-sm">
+          たいけん！ おちゃの えほん
+        </span>
+        <h1 class="text-3xl font-black text-green-800 leading-snug mb-4">
+          <ruby>お茶<rt>ちゃ</rt></ruby>は どうやって<br>
+          できるのかな？🌱<br>
+          <span class="text-xl text-green-600 font-bold">〜はっぱの へんしんの ひみつ〜</span>
+        </h1>
+        
+        <!-- お茶のキャラクター -->
+        <div class="relative w-44 h-44 my-4 animate-bounce">
+          <svg viewBox="0 0 200 200" class="w-full h-full">
+            <ellipse cx="100" cy="180" rx="45" ry="8" fill="#e2e8f0" />
+            <path d="M 100,20 C 160,70 160,140 100,175 C 40,140 40,70 100,20 Z" fill="#86efac" stroke="#16a34a" stroke-width="6" />
+            <path d="M 100,20 L 100,155" stroke="#16a34a" stroke-width="4" stroke-linecap="round" />
+            <path d="M 100,75 L 135,60 M 100,100 L 65,85 M 100,125 L 130,115" stroke="#16a34a" stroke-width="4" stroke-linecap="round" />
+            <!-- おめめと笑顔 -->
+            <circle cx="75" cy="100" r="7" fill="#1e293b" />
+            <circle cx="125" cy="100" r="7" fill="#1e293b" />
+            <circle cx="65" cy="112" r="6" fill="#fca5a5" />
+            <circle cx="135" cy="112" r="6" fill="#fca5a5" />
+            <path d="M 92,112 Q 100,122 108,112" stroke="#1e293b" stroke-width="4" stroke-linecap="round" fill="none" />
+          </svg>
+        </div>
+
+        <p class="text-gray-700 text-base font-bold leading-relaxed max-w-sm">
+          みんなが のむ <ruby>緑茶<rt>りょくちゃ</rt></ruby>は、もともと みどり色の はっぱなんだ。<br>
+          どうやって おいしい お茶になるのか、いっしょに <strong class="text-green-600">お茶づくり</strong>を たいけんしてみよう！
+        </p>
+      </div>
+
+      <!-- ================= 2ページ目：ステップ1 茶摘み ================= -->
+      <div id="page-2" class="page-content hidden flex flex-col items-center">
+        <h2 class="text-2xl font-black text-green-800 mb-2">
+          ① <ruby>茶摘<rt>ちゃつ</rt></ruby>み：はっぱを つもう！
+        </h2>
+        <p class="text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full mb-3 font-bold">
+          【やってみよう】やわらかい「しんめ」を ３つつまんでね！
+        </p>
+
+        <!-- 茶摘みインタラクティブ画面 -->
+        <div class="relative w-64 h-48 bg-emerald-50 rounded-2xl border-2 border-emerald-200 overflow-hidden flex items-center justify-center my-2">
+          <!-- お茶の木 -->
+          <svg viewBox="0 0 200 150" class="w-full h-full">
+            <!-- 地面 -->
+            <path d="M 10,130 Q 100,110 190,130" stroke="#854d0e" stroke-width="4" fill="none" />
+            <!-- 茂み -->
+            <path d="M 30,130 C 20,80 70,40 100,50 C 130,40 180,80 170,130 Z" fill="#22c55e" stroke="#15803d" stroke-width="4" />
+            
+            <!-- タップできる新芽3つ -->
+            <g id="bud-1" class="cursor-pointer transition-transform duration-200 active:scale-75" onclick="pickBud(1)">
+              <path d="M 60,60 C 65,45 80,45 75,60 C 70,70 60,70 60,60 Z" fill="#bef264" stroke="#4d7c0f" stroke-width="2" />
+              <path d="M 60,60 C 55,45 40,45 45,60 C 50,70 60,70 60,60 Z" fill="#bef264" stroke="#4d7c0f" stroke-width="2" />
+              <circle cx="60" cy="50" r="12" fill="transparent" /> <!-- タップ領域拡大 -->
+            </g>
+            
+            <g id="bud-2" class="cursor-pointer transition-transform duration-200 active:scale-75" onclick="pickBud(2)">
+              <path d="M 100,40 C 105,25 120,25 115,40 C 110,50 100,50 100,40 Z" fill="#bef264" stroke="#4d7c0f" stroke-width="2" />
+              <path d="M 100,40 C 95,25 80,25 85,40 C 90,50 100,50 100,40 Z" fill="#bef264" stroke="#4d7c0f" stroke-width="2" />
+              <circle cx="100" cy="30" r="12" fill="transparent" />
+            </g>
+
+            <g id="bud-3" class="cursor-pointer transition-transform duration-200 active:scale-75" onclick="pickBud(3)">
+              <path d="M 140,65 C 145,50 160,50 155,65 C 150,75 140,75 140,65 Z" fill="#bef264" stroke="#4d7c0f" stroke-width="2" />
+              <path d="M 140,65 C 135,50 120,50 125,65 C 130,75 140,75 140,65 Z" fill="#bef264" stroke="#4d7c0f" stroke-width="2" />
+              <circle cx="140" cy="55" r="12" fill="transparent" />
+            </g>
+          </svg>
+          
+          <!-- かご（集めた数） -->
+          <div class="absolute bottom-2 right-2 bg-amber-700 text-white rounded-xl px-3 py-1 font-bold text-xs flex items-center gap-1 shadow">
+            <span>🧺 かご:</span>
+            <span id="picked-count" class="text-sm text-yellow-300">0</span> / 3
+          </div>
+        </div>
+
+        <p class="text-gray-700 text-sm md:text-base font-bold leading-relaxed max-w-sm mt-2">
+          はるになって さいしょに出てくる、やわらかくて 黄緑（きみどり）色の <strong class="text-green-600">「新芽（しんめ）」</strong>を つむよ！これがおいしいお茶になるんだ。
+        </p>
+      </div>
+
+      <!-- ================= 3ページ目：ステップ2 蒸す ================= -->
+      <div id="page-3" class="page-content hidden flex flex-col items-center w-full">
+        <h2 class="text-2xl font-black text-green-800 mb-2">
+          ② <ruby>蒸<rt>む</rt></ruby>す：お熱を あてよう！
+        </h2>
+        <p class="text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full mb-3 font-bold">
+          【やってみよう】「むす！」ボタンを なんども おして 湯気をあてよう！
+        </p>
+
+        <!-- 蒸し器のイラスト & アニメーション -->
+        <div class="relative w-64 h-48 bg-blue-50 rounded-2xl border-2 border-blue-200 overflow-hidden flex flex-col items-center justify-center my-2">
+          
+          <!-- 湯気エフェクト用のコンテナ -->
+          <div id="steam-container" class="absolute inset-0 pointer-events-none flex justify-center items-center">
+            <!-- 動的生成される湯気 -->
+          </div>
+
+          <svg viewBox="0 0 200 150" class="w-full h-full">
+            <!-- 蒸し釜 -->
+            <rect x="50" y="80" width="100" height="40" rx="10" fill="#94a3b8" stroke="#475569" stroke-width="4" />
+            <rect x="45" y="75" width="110" height="10" rx="4" fill="#cbd5e1" stroke="#475569" stroke-width="3" />
+            <!-- 中の葉っぱ（色が変わる） -->
+            <path id="steaming-leaf" d="M 100,45 C 120,45 130,60 100,75 C 70,60 80,45 100,45 Z" fill="#bef264" stroke="#4d7c0f" stroke-width="3" class="transition-colors duration-500" />
+            <!-- 釜のあつあつマーク -->
+            <path d="M 60,100 L 70,100 M 130,100 L 140,100" stroke="#ef4444" stroke-width="3" stroke-linecap="round" />
+          </svg>
+
+          <!-- 温度ゲージ -->
+          <div class="absolute bottom-2 left-4 right-4 bg-gray-200 h-3 rounded-full overflow-hidden shadow-inner">
+            <div id="steam-gauge" class="bg-red-500 h-full w-0 transition-all duration-200"></div>
+          </div>
+          <span class="absolute bottom-5 text-[10px] font-bold text-red-600" id="steam-gauge-text">あつさ: 0%</span>
+        </div>
+
+        <button onclick="addSteam()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full shadow-md text-sm active:scale-95 transition-all mb-2">
+          ♨️ むす！
+        </button>
+
+        <p class="text-gray-700 text-sm md:text-base font-bold leading-relaxed max-w-sm">
+          つみたてのはっぱを、あつ〜い<ruby>湯気<rt>ゆげ</rt></ruby>で すぐにむすんだ。これで、はっぱの <strong class="text-emerald-600">きれいな みどり色</strong>が キープされるよ！
+        </p>
+      </div>
+
+      <!-- ================= 4ページ目：ステップ3 揉む ================= -->
+      <div id="page-4" class="page-content hidden flex flex-col items-center w-full">
+        <h2 class="text-2xl font-black text-green-800 mb-2">
+          ③ <ruby>揉<rt>も</rt></ruby>む：ぎゅっ ぎゅっ！
+        </h2>
+        <p class="text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full mb-3 font-bold">
+          【やってみよう】はっぱを クリックして もみもみ してね！
+        </p>
+
+        <!-- もみもみ画面 -->
+        <div class="relative w-64 h-48 bg-orange-50 rounded-2xl border-2 border-orange-200 overflow-hidden flex flex-col items-center justify-center my-2">
+          
+          <div class="w-full h-full flex items-center justify-center">
+            <!-- 揉まれる葉っぱ（徐々に細長くなる） -->
+            <svg viewBox="0 0 200 150" class="w-full h-full cursor-pointer" onclick="rubLeaf()">
+              <!-- 手のイラストの代わり：もみもみベース -->
+              <ellipse cx="100" cy="110" rx="60" ry="15" fill="#fed7aa" stroke="#f97316" stroke-width="2" stroke-dasharray="4 4" />
+              
+              <!-- 葉っぱ：もまれると形が変化する -->
+              <g id="rub-leaf-group" class="transition-transform duration-100 origin-center">
+                <!-- 1枚目：メイン -->
+                <path id="rub-leaf-1" d="M 100,45 C 130,45 130,75 100,105 C 70,75 70,45 100,45 Z" fill="#16a34a" stroke="#15803d" stroke-width="3" />
+                <!-- 葉脈 -->
+                <path id="rub-leaf-line" d="M 100,45 L 100,105" stroke="#15803d" stroke-width="2" />
+              </g>
+
+              <!-- こすれる火花・キラキラ風エフェクト -->
+              <path id="rub-sparkle" d="M 50,70 L 60,75 M 150,70 L 140,75 M 100,25 L 100,35" stroke="#f97316" stroke-width="3" stroke-linecap="round" class="hidden" />
+            </svg>
+          </div>
+
+          <!-- もみもみ度ゲージ -->
+          <div class="absolute bottom-2 left-4 right-4 bg-gray-200 h-3 rounded-full overflow-hidden shadow-inner">
+            <div id="rub-gauge" class="bg-orange-500 h-full w-0 transition-all duration-100"></div>
+          </div>
+          <span class="absolute bottom-5 text-[10px] font-bold text-orange-600" id="rub-gauge-text">もみもみ度: 0%</span>
+        </div>
+
+        <p class="text-gray-700 text-sm md:text-base font-bold leading-relaxed max-w-sm">
+          はっぱを つぶさないように <strong class="text-amber-700">やさしく もみもみ</strong> するよ。水分（すいぶん）を ぬきながら、お茶の おいしい味が 出やすくなるように するんだ！
+        </p>
+      </div>
+
+      <!-- ================= 5ページ目：ステップ4 乾燥 ================= -->
+      <div id="page-5" class="page-content hidden flex flex-col items-center w-full">
+        <h2 class="text-2xl font-black text-green-800 mb-2">
+          ④ <ruby>乾燥<rt>かんそう</rt></ruby>：からからに かわかそう！
+        </h2>
+        <p class="text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full mb-3 font-bold">
+          【やってみよう】「うちわ」を おして 風（かぜ）を おくろう！
+        </p>
+
+        <!-- 乾燥画面 -->
+        <div class="relative w-64 h-48 bg-cyan-50 rounded-2xl border-2 border-cyan-200 overflow-hidden flex flex-col items-center justify-center my-2">
+          
+          <svg viewBox="0 0 200 150" class="w-full h-full">
+            <!-- 風のライン -->
+            <path id="wind-line-1" d="M -20,40 Q 50,20 220,30" stroke="#38bdf8" stroke-width="3" fill="none" stroke-linecap="round" class="opacity-0 transition-opacity" />
+            <path id="wind-line-2" d="M -20,80 Q 50,100 220,70" stroke="#38bdf8" stroke-width="3" fill="none" stroke-linecap="round" class="opacity-0 transition-opacity" />
+
+            <!-- カラカラになるお茶の葉（針のようになっていく） -->
+            <g id="dry-leaves" class="transition-colors duration-500">
+              <!-- 細くなったお茶の葉 -->
+              <path id="dry-leaf-1" d="M 70,60 Q 85,55 100,70" stroke="#15803d" stroke-width="5" stroke-linecap="round" fill="none" />
+              <path id="dry-leaf-2" d="M 120,80 Q 135,90 110,100" stroke="#166534" stroke-width="4" stroke-linecap="round" fill="none" />
+              <path id="dry-leaf-3" d="M 80,100 Q 90,110 110,95" stroke="#14532d" stroke-width="5" stroke-linecap="round" fill="none" />
+            </g>
+
+            <!-- 水滴（乾くと消える） -->
+            <g id="water-drops">
+              <circle cx="85" cy="55" r="4" fill="#38bdf8" />
+              <circle cx="120" cy="85" r="4" fill="#38bdf8" />
+              <circle cx="100" cy="95" r="4" fill="#38bdf8" />
+            </g>
+          </svg>
+
+          <!-- カラカラ度ゲージ -->
+          <div class="absolute bottom-2 left-4 right-4 bg-gray-200 h-3 rounded-full overflow-hidden shadow-inner">
+            <div id="dry-gauge" class="bg-cyan-500 h-full w-0 transition-all duration-200"></div>
+          </div>
+          <span class="absolute bottom-5 text-[10px] font-bold text-cyan-600" id="dry-gauge-text">カラカラ度: 0%</span>
+        </div>
+
+        <button onclick="blowWind()" class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-6 rounded-full shadow-md text-sm active:scale-95 transition-all mb-2 flex items-center gap-1">
+          🎐 うちわで パタパタ！
+        </button>
+
+        <p class="text-gray-700 text-sm md:text-base font-bold leading-relaxed max-w-sm">
+          さいごに、あたたかい風（かぜ）を あてて、しっかりと かわかすよ！からからに することで、長いあいだ <strong class="text-cyan-600">おいしさを まもる</strong> ことができるんだ。
+        </p>
+      </div>
+
+      <!-- ================= 6ページ目：ステップ5 お茶をいれる ================= -->
+      <div id="page-6" class="page-content hidden flex flex-col items-center w-full">
+        <h2 class="text-2xl font-black text-green-800 mb-2">
+          ⑤ いれる：お湯を かけよう！
+        </h2>
+        <p class="text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full mb-3 font-bold">
+          【やってみよう】「お湯をそそぐ」ボタンを おしてね！
+        </p>
+
+        <!-- お湯をいれるアニメーション -->
+        <div class="relative w-64 h-48 bg-yellow-50 rounded-2xl border-2 border-yellow-200 overflow-hidden flex flex-col items-center justify-center my-2">
+          
+          <svg viewBox="0 0 200 150" class="w-full h-full">
+            <!-- 急須（きゅうす） -->
+            <g id="kyusu" class="transition-transform duration-500 origin-[140px_60px]">
+              <path d="M 80,70 C 80,45 130,45 130,70 C 130,85 80,85 80,70 Z" fill="#94a3b8" stroke="#475569" stroke-width="4" />
+              <path d="M 75,70 L 55,80" stroke="#475569" stroke-width="8" stroke-linecap="round" /> <!-- 注ぎ口 -->
+              <path d="M 120,55 L 145,35" stroke="#475569" stroke-width="6" stroke-linecap="round" /> <!-- 取っ手 -->
+              <circle cx="105" cy="50" r="6" fill="#e2e8f0" stroke="#475569" stroke-width="3" /> <!-- フタつまみ -->
+            </g>
+
+            <!-- 注がれるお茶のビーム -->
+            <path id="tea-stream" d="M 52,82 Q 40,105 45,115" stroke="#bef264" stroke-width="4" fill="none" stroke-linecap="round" class="opacity-0 transition-opacity" />
+
+            <!-- コップ -->
+            <path d="M 30,110 L 35,140 C 35,143 55,143 55,140 L 60,110 Z" fill="none" stroke="#ca8a04" stroke-width="3" />
+            <!-- コップの中のお茶（徐々に上昇する） -->
+            <path id="tea-liquid" d="M 35,140 L 35,140 C 35,140 55,140 55,140 L 55,140 Z" fill="#bef264" class="transition-all duration-300" />
+            
+            <!-- 茶葉くん（お茶の中で嬉しそう） -->
+            <g id="cup-chaba" class="opacity-0 transition-opacity duration-500">
+              <path d="M 120,115 C 135,115 140,125 120,135 C 100,125 105,115 120,115 Z" fill="#86efac" stroke="#16a34a" stroke-width="2" />
+              <circle cx="115" cy="122" r="2" fill="#1e293b" />
+              <circle cx="125" cy="122" r="2" fill="#1e293b" />
+            </g>
+          </svg>
+
+          <!-- おいしさゲージ -->
+          <div class="absolute bottom-2 left-4 right-4 bg-gray-200 h-3 rounded-full overflow-hidden shadow-inner">
+            <div id="brew-gauge" class="bg-yellow-400 h-full w-0 transition-all duration-200"></div>
+          </div>
+          <span class="absolute bottom-5 text-[10px] font-bold text-yellow-600" id="brew-gauge-text">おいしさ: 0%</span>
+        </div>
+
+        <button onclick="pourWater()" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-full shadow-md text-sm active:scale-95 transition-all mb-2 flex items-center gap-1">
+          🍵 お湯を そそぐ！
+        </button>
+
+        <p class="text-gray-700 text-sm md:text-base font-bold leading-relaxed max-w-sm">
+          カラカラになったはっぱに お湯をかけると… はっぱが <strong class="text-green-600">じわ〜っ</strong>と ひろがって、いいにおいと 美味（おい）しいお茶が とびだしてくるよ！
+        </p>
+      </div>
+
+      <!-- ================= 7ページ目：完成！ ================= -->
+      <div id="page-7" class="page-content hidden flex flex-col items-center">
+        <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-3 py-1 rounded-full mb-3 shadow-sm">
+          🎉 おめでとう！
+        </span>
+        <h2 class="text-3xl font-black text-green-800 leading-snug mb-4">
+          お茶づくりの<br>
+          ひみつマスター！🍵
+        </h2>
+        
+        <!-- お茶完成の豪華なイラスト -->
+        <div class="relative w-44 h-44 my-2 flex justify-center items-center">
+          <!-- メダル風背景 -->
+          <div class="absolute inset-0 bg-yellow-400 rounded-full opacity-20 animate-ping"></div>
+          <svg viewBox="0 0 200 200" class="w-full h-full z-10">
+            <!-- 大きな茶碗（お茶が入っている） -->
+            <path d="M 50,80 L 60,150 C 60,165 140,165 150,150 L 160,80 Z" fill="#bef264" stroke="#65a30d" stroke-width="6" />
+            <path d="M 45,75 Q 100,90 155,75" stroke="#65a30d" stroke-width="6" fill="none" />
+            <!-- キラキラ -->
+            <path d="M 30,50 L 35,60 L 45,60 L 37,68 L 40,78 L 30,70 L 20,78 L 23,68 L 15,60 L 25,60 Z" fill="#facc15" />
+            <path d="M 170,40 L 173,47 L 180,47 L 175,52 L 177,59 L 170,55 L 163,59 L 165,52 L 160,47 L 167,47 Z" fill="#facc15" />
+            <!-- 笑顔 -->
+            <circle cx="85" cy="115" r="6" fill="#1e293b" />
+            <circle cx="115" cy="115" r="6" fill="#1e293b" />
+            <path d="M 92,130 Q 100,140 108,130" stroke="#1e293b" stroke-width="4" stroke-linecap="round" fill="none" />
+          </svg>
+        </div>
+
+        <p class="text-gray-700 text-base font-bold leading-relaxed max-w-sm mt-4">
+          つみとって、むして、もんで、かわかして…<br>
+          たくさんのがんばりがあって、おいしいお茶が できるんだね。<br>
+          お茶を のむときは、つくってくれた 人に <strong class="text-green-600">ありがとう</strong> を つたえようね！
+        </p>
+      </div>
+
+    </div>
+
+    <!-- ページ下部：操作ボタン -->
+    <div class="p-4 bg-green-50 border-t-2 border-green-100 flex justify-between items-center rounded-b-3xl">
+      <button id="prev-btn" onclick="prevPage()" class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-3 px-5 rounded-2xl shadow transition-colors text-sm invisible">
+        まえへ
+      </button>
+      
+      <!-- 体験中（未クリア）に次のページに進ませないためのヒントメッセージ -->
+      <span id="hint-bubble" class="hidden absolute bottom-20 left-1/2 transform -translate-x-1/2 bg-amber-500 text-white text-xs font-bold py-2 px-4 rounded-xl shadow-lg whitespace-nowrap z-50">
+        👆 まずは やってみようを クリアしてね！
+      </span>
+
+      <button id="next-btn" onclick="handleNext()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-2xl shadow-lg transition-all transform active:scale-95 text-sm">
+        つぎへ
+      </button>
+    </div>
+
+  </main>
+
+  <!-- フッター -->
+  <footer class="text-center text-green-700 text-[10px] mt-4">
+    © おちゃの ひみつ たいけんえほん
+  </footer>
+
+  <!-- ページ切り替えとゲームロジックのJavaScript -->
+  <script>
+    let currentPage = 1;
+    const totalPages = 7;
+
+    // 各ページのクリア状態（2〜6ページがミニゲーム）
+    const pageStates = {
+      2: { cleared: false, count: 0, target: 3 }, // 茶摘み
+      3: { cleared: false, score: 0, target: 100 }, // 蒸す
+      4: { cleared: false, score: 0, target: 100 }, // 揉む
+      5: { cleared: false, score: 0, target: 100 }, // 乾燥
+      6: { cleared: false, score: 0, target: 100 }  // いれる
+    };
+
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const hintBubble = document.getElementById('hint-bubble');
+
+    // ------------------ ページの更新 ------------------
+    function updatePage() {
+      // すべてのページを隠す
+      for (let i = 1; i <= totalPages; i++) {
+        document.getElementById(`page-${i}`).classList.add('hidden');
+      }
+      
+      // 現在のページを表示
+      document.getElementById(`page-${currentPage}`).classList.remove('hidden');
+
+      // プログレスバーの更新
+      const progressPercent = (currentPage / totalPages) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+      progressText.textContent = `${currentPage} / ${totalPages} ぺーじ`;
+
+      // 「まえへ」ボタンの表示制御
+      if (currentPage === 1) {
+        prevBtn.classList.add('invisible');
+      } else {
+        prevBtn.classList.remove('invisible');
+      }
+
+      // 「つぎへ」ボタンのスタイル・文言変更
+      updateNextButtonState();
+    }
+
+    // 「つぎへ」ボタンの見た目を状態に合わせて変える
+    function updateNextButtonState() {
+      if (currentPage === totalPages) {
+        nextBtn.textContent = 'もういちど遊ぶ';
+        nextBtn.className = "bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-8 rounded-2xl shadow-lg transition-all transform active:scale-95 text-sm";
+      } else {
+        // ミニゲームのページで未クリアの場合、ボタンを少し薄くする
+        const state = pageStates[currentPage];
+        if (state && !state.cleared) {
+          nextBtn.textContent = 'やってみよう！';
+          nextBtn.className = "bg-green-400 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-2xl shadow-lg transition-all transform active:scale-95 text-sm opacity-90";
+        } else {
+          nextBtn.textContent = 'つぎへ';
+          nextBtn.className = "bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-2xl shadow-lg transition-all transform active:scale-95 text-sm";
+        }
+      }
+    }
+
+    // ------------------ 各ゲームのアクション ------------------
+
+    // 1. 茶摘み（芽をタップ）
+    function pickBud(id) {
+      const bud = document.getElementById(`bud-${id}`);
+      if (!bud || bud.style.opacity === '0.2') return;
+
+      // 収穫エフェクト
+      bud.style.opacity = '0.2';
+      bud.style.pointerEvents = 'none';
+
+      const state = pageStates[2];
+      state.count++;
+      document.getElementById('picked-count').textContent = state.count;
+
+      if (state.count >= state.target) {
+        state.cleared = true;
+        showHint("✨ ちゃつみ クリア！「つぎへ」をおしてね！", "bg-emerald-600");
+        updateNextButtonState();
+      }
+    }
+
+    // 2. 蒸す（湯気を追加）
+    function addSteam() {
+      const state = pageStates[3];
+      if (state.cleared) return;
+
+      state.score += 10;
+      if (state.score > state.target) state.score = state.target;
+
+      // ゲージと色の変更
+      document.getElementById('steam-gauge').style.width = `${state.score}%`;
+      document.getElementById('steam-gauge-text').textContent = `あつさ: ${state.score}%`;
+
+      // 湯気の泡をふわふわ出す
+      const container = document.getElementById('steam-container');
+      for (let i = 0; i < 3; i++) {
+        const steam = document.createElement('div');
+        steam.className = 'absolute bg-white rounded-full opacity-60 steam-effect';
+        const size = Math.random() * 20 + 10;
+        steam.style.width = `${size}px`;
+        steam.style.height = `${size}px`;
+        steam.style.left = `${Math.random() * 60 + 20}%`;
+        steam.style.top = `${Math.random() * 20 + 40}%`;
+        container.appendChild(steam);
+        setTimeout(() => steam.remove(), 1500);
+      }
+
+      // 100%に近づくほど葉っぱが鮮やかな緑になる
+      const leaf = document.getElementById('steaming-leaf');
+      if (state.score >= 100) {
+        leaf.setAttribute('fill', '#16a34a'); // 深い緑
+        state.cleared = true;
+        showHint("✨ むしあがったよ！「つぎへ」をおしてね！", "bg-emerald-600");
+        updateNextButtonState();
+      } else if (state.score > 50) {
+        leaf.setAttribute('fill', '#22c55e');
+      }
+    }
+
+    // 3. 揉む（もみもみクリック）
+    function rubLeaf() {
+      const state = pageStates[4];
+      if (state.cleared) return;
+
+      state.score += 10;
+      if (state.score > state.target) state.score = state.target;
+
+      document.getElementById('rub-gauge').style.width = `${state.score}%`;
+      document.getElementById('rub-gauge-text').textContent = `もみもみ度: ${state.score}%`;
+
+      // 葉っぱを揺らす・縮める
+      const leafGroup = document.getElementById('rub-leaf-group');
+      leafGroup.classList.add('shake-active');
+      setTimeout(() => leafGroup.classList.remove('shake-active'), 300);
+
+      const sparkle = document.getElementById('rub-sparkle');
+      sparkle.classList.remove('hidden');
+      setTimeout(() => sparkle.classList.add('hidden'), 200);
+
+      // 進捗に合わせて葉っぱの形を細長くする (SVGの変形)
+      const rub1 = document.getElementById('rub-leaf-1');
+      const line = document.getElementById('rub-leaf-line');
+      
+      const widthFactor = 130 - (state.score * 0.4); // もむほど細くなる
+      rub1.setAttribute('d', `M 100,45 C ${widthFactor},45 ${widthFactor},75 100,105 C ${200 - widthFactor},75 ${200 - widthFactor},45 100,45 Z`);
+
+      if (state.score >= 100) {
+        state.cleared = true;
+        showHint("✨ やわらかく もめました！「つぎへ」をおしてね！", "bg-emerald-600");
+        updateNextButtonState();
+      }
+    }
+
+    // 4. 乾燥（パタパタ仰ぐ）
+    function blowWind() {
+      const state = pageStates[5];
+      if (state.cleared) return;
+
+      state.score += 15;
+      if (state.score > state.target) state.score = state.target;
+
+      document.getElementById('dry-gauge').style.width = `${state.score}%`;
+      document.getElementById('dry-gauge-text').textContent = `カラカラ度: ${state.score}%`;
+
+      // 風のアニメーション
+      const w1 = document.getElementById('wind-line-1');
+      const w2 = document.getElementById('wind-line-2');
+      w1.classList.remove('opacity-0');
+      w2.classList.remove('opacity-0');
+      setTimeout(() => {
+        w1.classList.add('opacity-0');
+        w2.classList.add('opacity-0');
+      }, 300);
+
+      // 水滴を徐々に消す
+      const water = document.getElementById('water-drops');
+      water.style.opacity = (100 - state.score) / 100;
+
+      // 葉っぱの色をからから色（深緑〜少し茶が混ざった色）に変える
+      const leaves = document.getElementById('dry-leaves');
+      if (state.score >= 100) {
+        state.cleared = true;
+        leaves.style.filter = "contrast(1.2) brightness(0.8)";
+        showHint("✨ からからに 乾いたよ！「つぎへ」をおしてね！", "bg-emerald-600");
+        updateNextButtonState();
+      }
+    }
+
+    // 5. お茶をいれる
+    function pourWater() {
+      const state = pageStates[6];
+      if (state.cleared) return;
+
+      state.score += 20;
+      if (state.score > state.target) state.score = state.target;
+
+      document.getElementById('brew-gauge').style.width = `${state.score}%`;
+      document.getElementById('brew-gauge-text').textContent = `おいしさ: ${state.score}%`;
+
+      // 急須を傾ける
+      const kyusu = document.getElementById('kyusu');
+      kyusu.style.transform = "rotate(-25deg)";
+      
+      // 注ぎ口からお茶を出す
+      const stream = document.getElementById('tea-stream');
+      stream.classList.remove('opacity-0');
+
+      // コップのお茶をためる
+      const liquid = document.getElementById('tea-liquid');
+      // 高さを徐々に上げるアニメーション (y座標を変更)
+      const height = 140 - (state.score * 0.25);
+      liquid.setAttribute('d', `M 35,140 L 35,${height} C 35,${height} 55,${height} 55,${height} L 55,140 Z`);
+
+      setTimeout(() => {
+        kyusu.style.transform = "rotate(0deg)";
+        stream.classList.add('opacity-0');
+      }, 500);
+
+      if (state.score >= 100) {
+        state.cleared = true;
+        // 茶葉くんをコップの横にうれしそうに出現させる
+        document.getElementById('cup-chaba').classList.remove('opacity-0');
+        showHint("✨ おいしいお茶の できあがり！「つぎへ」をおしてね！", "bg-emerald-600");
+        updateNextButtonState();
+      }
+    }
+
+    // ------------------ 吹き出しヒント ------------------
+    function showHint(message, bgColorClass = "bg-amber-500") {
+      hintBubble.textContent = message;
+      hintBubble.className = `absolute bottom-20 left-1/2 transform -translate-x-1/2 text-white text-xs font-bold py-2 px-4 rounded-xl shadow-lg whitespace-nowrap z-50 ${bgColorClass}`;
+      hintBubble.classList.remove('hidden');
+      setTimeout(() => {
+        hintBubble.classList.add('hidden');
+      }, 3500);
+    }
+
+    // ------------------ ナビゲーション ------------------
+    function handleNext() {
+      // 最後のページならリセットして最初に戻る
+      if (currentPage === totalPages) {
+        resetApp();
+        return;
+      }
+
+      // ミニゲームのページでまだクリアしていない場合、進ませない
+      const state = pageStates[currentPage];
+      if (state && !state.cleared) {
+        showHint("👆 「やってみよう」をクリアすると、つぎにいけるよ！");
+        return;
+      }
+
+      // 次のページへ
+      if (currentPage < totalPages) {
+        currentPage++;
+        updatePage();
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        updatePage();
+      }
+    }
+
+    // アプリの全リセット
+    function resetApp() {
+      currentPage = 1;
+      
+      // ゲーム状態リセット
+      Object.keys(pageStates).forEach(key => {
+        pageStates[key].cleared = false;
+        if (pageStates[key].count !== undefined) pageStates[key].count = 0;
+        if (pageStates[key].score !== undefined) pageStates[key].score = 0;
+      });
+
+      // 表示のリセット
+      document.getElementById('picked-count').textContent = '0';
+      document.getElementById('steam-gauge').style.width = '0%';
+      document.getElementById('steam-gauge-text').textContent = 'あつさ: 0%';
+      document.getElementById('steaming-leaf').setAttribute('fill', '#bef264');
+      
+      document.getElementById('rub-gauge').style.width = '0%';
+      document.getElementById('rub-gauge-text').textContent = 'もみもみ度: 0%';
+      document.getElementById('rub-leaf-1').setAttribute('d', 'M 100,45 C 130,45 130,75 100,105 C 70,75 70,45 100,45 Z');
+
+      document.getElementById('dry-gauge').style.width = '0%';
+      document.getElementById('dry-gauge-text').textContent = 'カラカラ度: 0%';
+      document.getElementById('water-drops').style.opacity = '1';
+      document.getElementById('dry-leaves').style.filter = 'none';
+
+      document.getElementById('brew-gauge').style.width = '0%';
+      document.getElementById('brew-gauge-text').textContent = 'おいしさ: 0%';
+      document.getElementById('tea-liquid').setAttribute('d', 'M 35,140 L 35,140 C 35,140 55,140 55,140 L 55,140 Z');
+      document.getElementById('cup-chaba').classList.add('opacity-0');
+
+      // 1、2ページ目の茶の木の芽を復活
+      for (let i = 1; i <= 3; i++) {
+        const bud = document.getElementById(`bud-${i}`);
+        if (bud) {
+          bud.style.opacity = '1';
+          bud.style.pointerEvents = 'auto';
+        }
+      }
+
+      updatePage();
+    }
+
+    // 初期化
+    window.onload = function() {
+      updatePage();
+    }
+  </script>
+</body>
+</html>
